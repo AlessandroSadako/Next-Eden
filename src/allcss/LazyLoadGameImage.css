@@ -1,0 +1,8 @@
+/* Image inside cards */
+.style-game-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+  background: rgba(240, 240, 240, 0.6);
+}

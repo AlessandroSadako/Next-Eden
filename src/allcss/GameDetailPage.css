@@ -1,0 +1,27 @@
+/* Game detail page styles */
+.game-detail-image {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+.game-detail-chat-area {
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.custom-chat-title {
+  background-color: var(--eden-dark) !important;
+  color: var(--eden-gold-dark) !important;
+  border-bottom: 2px solid var(--eden-gold-dark) !important;
+}
+.mela-custom-chat {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.bg-chat-custom {
+  background-color: var(--eden-dark) !important;
+  border: 1px solid var(--eden-gold-dark) !important;
+  border-radius: 20px;
+  padding: 10px;
+}

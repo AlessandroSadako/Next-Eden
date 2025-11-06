@@ -1,0 +1,5 @@
+/* Favorite button icon sizing */
+.btn-success img {
+  width: 20px;
+  height: 20px;
+}

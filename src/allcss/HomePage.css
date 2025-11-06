@@ -1,0 +1,14 @@
+/* Homepage grid */
+.style-homepage {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
+}
+
+@media (max-width: 420px) {
+  .style-game-image {
+    height: 120px;
+  }
+}

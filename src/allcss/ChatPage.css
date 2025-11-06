@@ -1,0 +1,10 @@
+/* Chat page specific styles */
+.chat-container {
+  max-width: 720px;
+}
+
+.chat-messages-area {
+  height: 200px;
+  overflow-y: auto;
+  background: var(--eden-gold-dark) !important;
+}
