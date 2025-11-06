@@ -8,7 +8,7 @@ export default function HomePage() {
 
   const RAWG_KEY = import.meta.env.VITE_RAWG_KEY;
 
-  const genresUrl = `/rawg/genres?key=${RAWG_KEY}`;
+  const genresUrl = `https://api.rawg.io/api/genres?key=${RAWG_KEY}`;
   const {
     data: genres,
     loading: loadingGenres,
@@ -16,8 +16,8 @@ export default function HomePage() {
   } = useFetchSolution(genresUrl);
 
   const gamesUrl = selectedGenre
-    ? `/rawg/games?key=${RAWG_KEY}&genres=${selectedGenre}`
-    : `/rawg/games?key=${RAWG_KEY}`;
+    ? `https://api.rawg.io/api/games?key=${RAWG_KEY}&genres=${selectedGenre}`
+    : `https://api.rawg.io/api/games?key=${RAWG_KEY}`;
   const {
     data: games,
     loading: loadingGames,

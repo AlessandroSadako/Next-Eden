@@ -9,7 +9,7 @@ export default function GameDetailPage() {
   const { id } = useParams();
   const { user } = useSession();
   const RAWG_KEY = import.meta.env.VITE_RAWG_KEY;
-  const initialUrl = `/rawg/games/${id}?key=${RAWG_KEY}`;
+  const initialUrl = `https://api.rawg.io/api/games/${id}?key=${RAWG_KEY}`;
   const { data: game, loading, error } = useFetchSolution(initialUrl);
 
   const [messages, setMessages] = useState([]);

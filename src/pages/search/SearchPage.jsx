@@ -17,7 +17,7 @@ export default function SearchPage() {
     usp.set("page", "1");
     if (q) usp.set("search", q);
     if (genre) usp.set("genres", genre);
-    return `/rawg/games?${usp.toString()}`;
+    return `https://api.rawg.io/api/games?${usp.toString()}`;
   };
 
   const { data, loading, error, setUrl } = useFetchSolution(buildUrl(q, genre));

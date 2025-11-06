@@ -12,7 +12,7 @@ export default function GenresDropdown() {
 
   const RAWG_KEY = import.meta.env.VITE_RAWG_KEY;
   const { data, loading, error } = useFetchSolution(
-    `/rawg/genres?key=${RAWG_KEY}`
+    `https://api.rawg.io/api/genres?key=${RAWG_KEY}`
   );
 
   const currentQuery = (searchParams.get("query") || "").trim();

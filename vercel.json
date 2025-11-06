@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/rawg/(.*)",
+      "destination": "https://api.rawg.io/api/$1"
+    }
+  ]
+}
