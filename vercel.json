@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/rawg/(.*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
