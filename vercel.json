@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/rawg/(.*)",
-      "destination": "https://api.rawg.io/api/$1"
+      "destination": "/index.html"
     }
   ]
 }
