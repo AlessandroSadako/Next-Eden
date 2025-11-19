@@ -1,4 +1,31 @@
-/* Signup page container */
 .auth-container {
   max-width: 480px;
+}
+
+.auth-container h1,
+.auth-container h2,
+.auth-container h3 {
+  font-family: var(--font-title);
+  color: var(--eden-gold-dark);
+}
+
+.auth-container label,
+.auth-container .form-label {
+  font-family: var(--font-title);
+  color: var(--eden-gold-dark);
+  letter-spacing: 0.3px;
+}
+
+.auth-container .auth-cta {
+  font-family: var(--font-title);
+  color: var(--eden-gold-dark);
+}
+
+.auth-container .auth-cta-link {
+  color: var(--eden-gold-dark);
+  text-decoration: underline;
+}
+
+.auth-container .auth-cta-link:hover {
+  text-decoration: none;
 }

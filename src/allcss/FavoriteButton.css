@@ -1,5 +1,22 @@
-/* Favorite button icon sizing */
-.btn-success img {
-  width: 20px;
-  height: 20px;
+.favorite-btn img {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease;
+}
+
+.favorite-btn {
+  padding: 0.5rem 0.75rem !important;
+  min-width: auto !important;
+  text-transform: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover {
+  transform: translateY(-1px) !important;
+}
+
+.favorite-btn:hover img {
+  transform: scale(1.1);
 }

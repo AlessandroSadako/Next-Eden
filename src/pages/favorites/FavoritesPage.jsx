@@ -1,13 +1,15 @@
 import { useFavorites } from "../../context/FavoritesContext";
+import { useToasts } from "../../context/ToastsContext";
 import "../../allcss/FavoritePage.css";
 
 export default function FavoritesPage() {
   const { favorites, loading, removeFavorite } = useFavorites();
+  const { success, error } = useToasts();
 
   if (loading) {
     return (
       <div className="container py-4">
-        <p>Caricamento preferiti…</p>
+        <p className="text-gold-dark">Caricamento preferiti…</p>
       </div>
     );
   }
@@ -16,10 +18,22 @@ export default function FavoritesPage() {
     return (
       <div className="container py-4">
         <h2 className="mb-3">I miei preferiti</h2>
-        <p>Non hai ancora aggiunto nessun gioco ai preferiti.</p>
+        <p className="text-gold-dark">
+          Non hai ancora aggiunto nessun gioco ai preferiti.
+        </p>
       </div>
     );
   }
+
+  const onRemove = async (fav) => {
+    try {
+      // Mostra subito il toast per consistenza con le altre pagine
+      success(`Rimosso dai preferiti: ${fav.game_name}`);
+      await removeFavorite(fav.game_id);
+    } catch (e) {
+      error("Operazione non riuscita");
+    }
+  };
 
   return (
     <div className="container py-4">
@@ -43,7 +57,7 @@ export default function FavoritesPage() {
                 <h6 className="card-title">{f.game_name}</h6>
                 <button
                   className="btn btn-sm btn-outline-danger mt-auto"
-                  onClick={() => removeFavorite(f.game_id)}
+                  onClick={() => onRemove(f)}
                 >
                   Rimuovi
                 </button>

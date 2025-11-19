@@ -8,6 +8,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userProfiles, setUserProfiles] = useState({});
 
   useEffect(() => {
     let ignore = false;
@@ -24,6 +25,22 @@ export default function ChatPage() {
           console.error("Load messages error:", error);
         } else {
           setMessages(data || []);
+          // Carica i profili degli utenti
+          if (data && data.length > 0) {
+            const userIds = [...new Set(data.map((m) => m.user_id))];
+            const { data: profiles } = await supabase
+              .from("profiles")
+              .select("id, username")
+              .in("id", userIds);
+
+            if (profiles) {
+              const profilesMap = {};
+              profiles.forEach((p) => {
+                profilesMap[p.id] = p.username || "Utente";
+              });
+              setUserProfiles(profilesMap);
+            }
+          }
         }
         setLoading(false);
       }
@@ -36,8 +53,23 @@ export default function ChatPage() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
-        (payload) => {
+        async (payload) => {
           setMessages((curr) => [...curr, payload.new]);
+          // Carica il profilo del nuovo utente se non presente
+          if (!userProfiles[payload.new.user_id]) {
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("id, username")
+              .eq("id", payload.new.user_id)
+              .single();
+
+            if (profile) {
+              setUserProfiles((prev) => ({
+                ...prev,
+                [profile.id]: profile.username || "Utente",
+              }));
+            }
+          }
         }
       )
       .subscribe();
@@ -77,20 +109,24 @@ export default function ChatPage() {
       )}
 
       <div className="border rounded p-3 mb-3 chat-messages-area">
-        {loading && <p className="text-muted">Caricamento…</p>}
+        {loading && <p className="text-gold-dark">Caricamento…</p>}
         {!loading && messages.length === 0 && (
-          <p className="text-muted">Nessun messaggio.</p>
+          <p className="text-gold-dark">Nessun messaggio.</p>
         )}
 
         {messages.map((m) => (
-          <div key={m.id} className="mb-2">
-            <div className="small text-secondary">
-              <strong>
-                {m.user_id === user?.id ? "Tu" : m.user_id.slice(0, 8)}
-              </strong>{" "}
-              · {new Date(m.created_at).toLocaleString()}
+          <div key={m.id} className="mb-3">
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <strong className="small text-gold-dark">
+                {m.user_id === user?.id
+                  ? "Tu"
+                  : userProfiles[m.user_id] || "Utente"}
+              </strong>
+              <span className="small text-gold-dark" style={{ opacity: 0.8 }}>
+                {new Date(m.created_at).toLocaleString()}
+              </span>
             </div>
-            <div>{m.content}</div>
+            <div className="text-gold-dark">{m.content}</div>
           </div>
         ))}
       </div>

@@ -30,7 +30,7 @@ export default function SearchPage() {
     <div className="container py-4">
       <h2 className="mb-3">Risultati ricerca</h2>
 
-      {loading && <p>Caricamento…</p>}
+      {loading && <p className="text-gold-dark">Caricamento…</p>}
       {error && <p className="text-danger">Errore: {error}</p>}
 
       <div className="row">

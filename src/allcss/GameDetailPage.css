@@ -1,7 +1,17 @@
-/* Game detail page styles */
 .game-detail-image {
   max-height: 400px;
   object-fit: cover;
+}
+
+.game-detail-logo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 80px;
+  height: auto;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .game-detail-chat-area {

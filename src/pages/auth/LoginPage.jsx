@@ -53,7 +53,7 @@ export default function LoginPage() {
       {msg && <div className={`alert alert-${msg.type}`}>{msg.text}</div>}
 
       <form onSubmit={onSubmit} className="vstack gap-3">
-        <div>
+        <div className="has-validation-tooltip">
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -65,13 +65,17 @@ export default function LoginPage() {
             value={form.email}
             onChange={onChange}
             autoComplete="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
           />
           {errors.email && (
-            <div className="invalid-feedback">{errors.email[0]}</div>
+            <span id="email-error" className="validation-tooltip">
+              {errors.email[0]}
+            </span>
           )}
         </div>
 
-        <div>
+        <div className="has-validation-tooltip">
           <label htmlFor="password" className="form-label">
             Password
           </label>
@@ -83,9 +87,13 @@ export default function LoginPage() {
             value={form.password}
             onChange={onChange}
             autoComplete="current-password"
+            aria-invalid={!!errors.password}
+            aria-describedby={errors.password ? "password-error" : undefined}
           />
           {errors.password && (
-            <div className="invalid-feedback">{errors.password[0]}</div>
+            <span id="password-error" className="validation-tooltip">
+              {errors.password[0]}
+            </span>
           )}
         </div>
 
@@ -94,8 +102,11 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="mt-3 mb-0">
-        Non hai un account? <Link to="/auth/signup">Registrati</Link>
+      <p className="mt-3 mb-0 auth-cta">
+        Non hai ancora un account?{" "}
+        <Link to="/auth/signup" className="auth-cta-link">
+          Registrati ora
+        </Link>
       </p>
     </div>
   );

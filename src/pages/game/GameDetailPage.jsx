@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useFetchSolution from "../../hooks/useFetchSolution";
 import { supabase } from "../../supabase/supabaseClient";
 import { useSession } from "../../context/SessionProvider";
+import FavoriteButton from "../../components/FavoriteButton";
 import "../../allcss/GameDetailPage.css";
 
 export default function GameDetailPage() {
@@ -15,6 +16,7 @@ export default function GameDetailPage() {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loadingChat, setLoadingChat] = useState(true);
+  const [userProfiles, setUserProfiles] = useState({});
 
   useEffect(() => {
     let ignore = false;
@@ -32,6 +34,22 @@ export default function GameDetailPage() {
           console.error("Load messages error:", error);
         } else {
           setMessages(data || []);
+          // Carica i profili degli utenti
+          if (data && data.length > 0) {
+            const userIds = [...new Set(data.map((m) => m.user_id))];
+            const { data: profiles } = await supabase
+              .from("profiles")
+              .select("id, username")
+              .in("id", userIds);
+
+            if (profiles) {
+              const profilesMap = {};
+              profiles.forEach((p) => {
+                profilesMap[p.id] = p.username || "Utente";
+              });
+              setUserProfiles(profilesMap);
+            }
+          }
         }
         setLoadingChat(false);
       }
@@ -49,8 +67,23 @@ export default function GameDetailPage() {
           table: "messages",
           filter: `game_id=eq.${id}`,
         },
-        (payload) => {
+        async (payload) => {
           setMessages((curr) => [...curr, payload.new]);
+          // Carica il profilo del nuovo utente se non presente
+          if (!userProfiles[payload.new.user_id]) {
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("id, username")
+              .eq("id", payload.new.user_id)
+              .single();
+
+            if (profile) {
+              setUserProfiles((prev) => ({
+                ...prev,
+                [profile.id]: profile.username || "Utente",
+              }));
+            }
+          }
         }
       )
       .subscribe();
@@ -80,7 +113,8 @@ export default function GameDetailPage() {
     setText("");
   };
 
-  if (loading) return <div className="container py-4">Caricamento…</div>;
+  if (loading)
+    return <div className="container py-4 text-gold-dark">Caricamento…</div>;
   if (error) return <div className="container py-4 text-danger">{error}</div>;
   if (!game) return null;
 
@@ -89,14 +123,25 @@ export default function GameDetailPage() {
       <div className="row g-4">
         <div className="col-12 col-lg-7">
           <div className="card shadow">
-            <img
-              src={game.background_image}
-              className="card-img-top game-detail-image"
-              alt={game.name}
-            />
+            <div className="position-relative">
+              <img
+                src={game.background_image}
+                className="card-img-top game-detail-image"
+                alt={game.name}
+              />
+              {/* Logo in alto a destra */}
+              <img
+                src="/nextedenlogo.png"
+                alt="Next Eden Logo"
+                className="game-detail-logo"
+              />
+            </div>
             <div className="card-body">
-              <h2 className="card-title">{game.name}</h2>
-              <p className="text-muted mb-2">{game.released}</p>
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <h2 className="card-title mb-0">{game.name}</h2>
+                <FavoriteButton game={game} />
+              </div>
+              <p className="text-gold-dark mb-2">{game.released}</p>
               <div dangerouslySetInnerHTML={{ __html: game.description }} />
             </div>
           </div>
@@ -122,22 +167,32 @@ export default function GameDetailPage() {
               )}
 
               <div className="flex-grow-1 p-3 game-detail-chat-area">
-                {loadingChat && <p className="text-muted">Caricamento chat…</p>}
+                {loadingChat && (
+                  <p className="text-gold-dark">Caricamento chat…</p>
+                )}
                 {!loadingChat && messages.length === 0 && (
-                  <p className="text-muted">
+                  <p className="text-gold-dark">
                     Nessun messaggio. Inizia la conversazione!
                   </p>
                 )}
 
                 {messages.map((m) => (
                   <div key={m.id} className="mb-3">
-                    <div className="bg-chat-custom small text-gold-dark mb-1">
-                      <strong>
-                        {m.user_id === user?.id ? "Tu" : m.user_id.slice(0, 8)}
-                      </strong>{" "}
-                      · {new Date(m.created_at).toLocaleString()}
-                      <div className=" p-2 rounded"></div>
-                      {m.content}
+                    <div className="bg-chat-custom text-gold-dark">
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <strong className="small">
+                          {m.user_id === user?.id
+                            ? "Tu"
+                            : userProfiles[m.user_id] || "Utente"}
+                        </strong>
+                        <span
+                          className="small text-gold-dark"
+                          style={{ opacity: 0.8 }}
+                        >
+                          {new Date(m.created_at).toLocaleString()}
+                        </span>
+                      </div>
+                      <div>{m.content}</div>
                     </div>
                   </div>
                 ))}

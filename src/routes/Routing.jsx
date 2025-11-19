@@ -5,6 +5,7 @@ import GameDetailPage from "../pages/game/GameDetailPage";
 import SearchPage from "../pages/search/SearchPage";
 import LoginPage from "../pages/auth/LoginPage";
 import SignUpPage from "../pages/auth/SignUpPage";
+import AuthCallback from "../pages/auth/AuthCallback";
 import ErrorPage from "../pages/error/ErrorPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import FavoritesPage from "../pages/favorites/FavoritesPage";
@@ -20,6 +21,7 @@ export default function Routing() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/chat" element={<ChatPage />} />

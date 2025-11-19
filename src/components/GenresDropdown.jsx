@@ -30,14 +30,12 @@ export default function GenresDropdown() {
     });
   };
 
-  if (loading) return <p className="mb-0">Caricamento generi…</p>;
+  if (loading)
+    return <p className="mb-0 text-gold-dark">Caricamento generi…</p>;
   if (error) return <p className="text-danger mb-0">{error}</p>;
 
   return (
     <div className="mb-3">
-      <label htmlFor="genre-select" className="form-label">
-        Filtri
-      </label>
       <select
         id="genre-select"
         name="genre"

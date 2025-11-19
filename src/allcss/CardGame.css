@@ -23,8 +23,12 @@
   flex-direction: column;
 }
 
-.cardgame-card .card-text {
-  color: #fff !important;
+.cardgame-card .card-text,
+.cardgame-card .card-text strong,
+.cardgame-card .card-text em,
+.cardgame-card .card-text small {
+  color: var(--eden-gold-dark) !important;
+  font-family: var(--font-body);
 }
 
 .cardgame-footer {

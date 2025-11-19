@@ -56,6 +56,7 @@ export default function SignupPage() {
           data: {
             username: form.username,
           },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
       });
       if (authError) throw authError;
@@ -81,8 +82,8 @@ export default function SignupPage() {
 
       {msg && <div className={`alert alert-${msg.type}`}>{msg.text}</div>}
 
-      <form onSubmit={onSubmit} className="vstack gap-3">
-        <div>
+      <form onSubmit={onSubmit} className="vstack gap-3" noValidate>
+        <div className="has-validation-tooltip">
           <label htmlFor="username" className="form-label">
             Username <span className="text-danger">*</span>
           </label>
@@ -95,14 +96,17 @@ export default function SignupPage() {
             onChange={onChange}
             autoComplete="username"
             placeholder="Scegli un username"
-            required
+            aria-invalid={!!errors.username}
+            aria-describedby={errors.username ? "username-error" : undefined}
           />
           {errors.username && (
-            <div className="invalid-feedback">{errors.username[0]}</div>
+            <span id="username-error" className="validation-tooltip">
+              {errors.username[0]}
+            </span>
           )}
         </div>
 
-        <div>
+        <div className="has-validation-tooltip">
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -114,13 +118,17 @@ export default function SignupPage() {
             value={form.email}
             onChange={onChange}
             autoComplete="email"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "signup-email-error" : undefined}
           />
           {errors.email && (
-            <div className="invalid-feedback">{errors.email[0]}</div>
+            <span id="signup-email-error" className="validation-tooltip">
+              {errors.email[0]}
+            </span>
           )}
         </div>
 
-        <div>
+        <div className="has-validation-tooltip">
           <label htmlFor="password" className="form-label">
             Password
           </label>
@@ -132,13 +140,19 @@ export default function SignupPage() {
             value={form.password}
             onChange={onChange}
             autoComplete="new-password"
+            aria-invalid={!!errors.password}
+            aria-describedby={
+              errors.password ? "signup-password-error" : undefined
+            }
           />
           {errors.password && (
-            <div className="invalid-feedback">{errors.password[0]}</div>
+            <span id="signup-password-error" className="validation-tooltip">
+              {errors.password[0]}
+            </span>
           )}
         </div>
 
-        <div>
+        <div className="has-validation-tooltip">
           <label htmlFor="confirmPassword" className="form-label">
             Conferma Password
           </label>
@@ -152,9 +166,15 @@ export default function SignupPage() {
             value={form.confirmPassword}
             onChange={onChange}
             autoComplete="new-password"
+            aria-invalid={!!errors.confirmPassword}
+            aria-describedby={
+              errors.confirmPassword ? "confirm-password-error" : undefined
+            }
           />
           {errors.confirmPassword && (
-            <div className="invalid-feedback">{errors.confirmPassword[0]}</div>
+            <span id="confirm-password-error" className="validation-tooltip">
+              {errors.confirmPassword[0]}
+            </span>
           )}
         </div>
 
@@ -163,8 +183,11 @@ export default function SignupPage() {
         </button>
       </form>
 
-      <p className="mt-3 mb-0">
-        Hai già un account? <Link to="/auth/login">Accedi</Link>
+      <p className="mt-3 mb-0 auth-cta">
+        Hai già un account?{" "}
+        <Link to="/auth/login" className="auth-cta-link">
+          Accedi
+        </Link>
       </p>
     </div>
   );
